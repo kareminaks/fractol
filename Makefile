@@ -1,7 +1,7 @@
 DEFAULT_GOAL := all
 NAME = fractol
 CFLAGS = -Wall -Werror -Wextra
-SRC = main.c 
+SRC = main.c fractals.c 
 OBJ = $(SRC:.c=.o)
 HEADER = $(NAME).h
 INCLUDES += -Ilibft -Iminilibx
