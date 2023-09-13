@@ -52,6 +52,13 @@ unsigned int julia(int x, int y, t_params* params, t_complex julia);
 double parse_double(char* s);
 t_complex abs_complex(t_complex c);
 unsigned int burningship(int x, int y, t_params* params);
+double module(t_complex c);
+int ft_streq(char* a, char* b);
+t_complex mult_complex(t_complex a, t_complex b);
+t_complex add_complex(t_complex a, t_complex b);
+t_complex abs_complex(t_complex c);
+double norm_complex(t_complex a);
+int max (int a, int b);
 
 
 #endif

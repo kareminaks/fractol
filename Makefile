@@ -1,7 +1,7 @@
 DEFAULT_GOAL := all
 NAME = fractol
-CFLAGS = -Wall -Werror -Wextra
-SRC = main.c fractals.c 
+CFLAGS = -Wall -Werror -Wextra -g
+SRC = main.c fractals.c  math.c
 OBJ = $(SRC:.c=.o)
 HEADER = $(NAME).h
 INCLUDES += -Ilibft -Iminilibx
@@ -12,10 +12,10 @@ libft/libft.a:
 	make -C libft
 
 minilibx/libmlx.a:
-	make -C mlx_linux
+	make -C minilibx
 
 %.o: %.c $(HEADER)
-	$(CC) -Wall -Wextra -Werror $(INCLUDES) -O3 -c $< -o $@
+	$(CC) $(CFLAGS) $(INCLUDES) -O3 -c $< -o $@
 
 $(NAME): $(OBJ) $(HEADER) libft/libft.a ./minilibx/libmlx.a
 	$(CC) $(OBJ) ./libft/libft.a ./minilibx/libmlx.a -lXext -lX11 -lm -o $(NAME)
@@ -23,7 +23,7 @@ $(NAME): $(OBJ) $(HEADER) libft/libft.a ./minilibx/libmlx.a
 clean:
 	rm -f $(OBJ)
 	make -C libft clean
-	make -C ./mlx_linux clean
+	make -C ./minilibx clean
 
 fclean: clean
 	rm -f $(NAME)

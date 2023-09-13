@@ -1,12 +1,6 @@
 #include"fractol.h"
 
-int ft_streq(char* a, char* b) {
-    while(*a && *b && *a == *b) {
-        a++;
-        b++;
-    }
-    return *a == *b;
-}
+
 
 void choose_fractal(int argc,char *argv[], t_params* params)
 {
@@ -77,9 +71,6 @@ unsigned int color(double value) {
 	return rgb(rg, rg, rg);
 }
 
-double module(t_complex c) {
-	return hypot(c.real, c.imag);
-}
 
 unsigned int mandelbrot(int x, int y, t_params* params)
 {
