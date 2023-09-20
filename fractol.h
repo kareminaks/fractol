@@ -10,6 +10,7 @@
 #define WIDTH 1920
 #define HEIGHT 1080
 
+
 typedef struct	s_data {
 	void	*img;
 	char	*addr;
@@ -34,6 +35,7 @@ typedef struct params {
 
     int argc;
     char** argv;
+	 
 
 	int downsampling;
 }	t_params;

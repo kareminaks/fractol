@@ -58,6 +58,7 @@ int on_keydown(int key, t_params* params) {
 	if (key == '[') params->downsampling*=2;
 	if ((key == ']') && (params->downsampling > 1)) params->downsampling/=2;
 	if (key == 65307) on_destroy();
+	if (key == 'c') params->color = alternative_color;
 
 	
 	choose_fractal(params->argc, params->argv, params);
@@ -101,10 +102,19 @@ double parse_double(char* s) {
 
 int	mouse_event(int key, int x, int y, t_params *params)
 {	
-	(void)x;
-	(void)y;
-	if (key == 4) params->scale *= 2;
-	else if (key == 5) params->scale /= 2;
+	const float addscale = 1.25;(kek * 31 - d) / 32
+	if (key == 4) {
+		params->scale *=addscale;
+	}
+	else if (key == 5) {
+		printf("screen delta: %f\n", (float)(x-WIDTH/2) * (1 - 1/addscale));
+		printf("params->scale: %f\n", params->scale * 1920 / 4);
+		params->dx += (float)(x-WIDTH/2) * (1 - 1/addscale) * params->scale / (WIDTH / 4);
+		params->dy += (float)(y-HEIGHT/2) * (1 - 1/addscale) * params->scale / (WIDTH / 4);
+		params->scale /= addscale;
+	}
+
+
 	choose_fractal(params->argc, params->argv, params);
 	mlx_put_image_to_window(params->mlx, params->mlx_win, params->img->img, 0, 0);
 	return (1);
@@ -125,6 +135,7 @@ int	main(int argc, char **argv)
 	params.argc = argc;
 	params.argv = argv;
 	params.downsampling = 8;
+	params.color = normal_color;
 
 	mlx = mlx_init();
 	mlx_win = mlx_new_window(mlx, 1920, 1080, "fractal");

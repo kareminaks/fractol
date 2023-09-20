@@ -58,18 +58,34 @@ void choose_fractal(int argc,char *argv[], t_params* params)
 	}
 }
 
-unsigned int color(double value) {
+unsigned int normal_color(double value) {
 	if (value > 1.0) value = 1.0;
 	if (value < 0) value = 0;
 
 	if (value > 0.5) {
-		return color((value - 0.5)*2);
+		return normal_color((value - 0.5)*2);
 	}
 
 	// int blue = (int)((1.0 - value) * 255.0);
 	int rg = 255.0*value*2;
-	return rgb(rg, rg, rg);
+	return rgb(255, rg, 255-rg);
 }
+
+
+
+unsigned int alternative_color(double value) {
+	if (value > 1.0) value = 1.0;
+	if (value < 0) value = 0;
+
+	if (value > 0.5) {
+		return alternative_color((value - 0.5)*2);
+	}
+
+	// int blue = (int)((1.0 - value) * 255.0);
+	int rg = 255.0*value*2;
+	return rgb(255, rg, 255-rg);
+}
+
 
 
 unsigned int mandelbrot(int x, int y, t_params* params)
@@ -103,7 +119,11 @@ unsigned int mandelbrot(int x, int y, t_params* params)
 	double kek = (double)i/(double)max_i;
 	double d = module(c)	/ radius;
 
-	return color((kek * 31 - d) / 32);
+	if (c is pressed) {
+		return alternative_color((kek * 31 - d) / 32);
+	}
+
+	return normal_color((kek * 31 - d) / 32);
 
 }
 
