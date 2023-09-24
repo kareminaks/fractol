@@ -6,11 +6,18 @@
 /*   By: ksenia <ksenia@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/24 13:44:30 by ksenia            #+#    #+#             */
-/*   Updated: 2023/09/24 14:38:38 by ksenia           ###   ########.fr       */
+/*   Updated: 2023/09/24 15:04:45 by ksenia           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fractol.h"
+
+int	max(int a, int b)
+{
+	if (a > b)
+		return (a);
+	return (b);
+}
 
 double	parse_mantissa(char *s, int *dot, int *power)
 {

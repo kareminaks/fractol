@@ -73,6 +73,7 @@ int	on_destroy(void);
 #define MANDELBROT_RADIUS 100
 #define MANDELBROT_MAX_I 256
 #define JULIA_MAX_I 128
-
+#define BURNINGSHIP_MAX_I 256
+#define BURNINGSHIP_RADIUS 100
 
 #endif
