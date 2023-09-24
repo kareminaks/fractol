@@ -40,6 +40,9 @@ typedef struct params {
 	int downsampling;
 }	t_params;
 
+typedef unsigned int u32;
+typedef unsigned char u8;
+
 void	my_mlx_pixel_put(t_data *data, int x, int y, int color);
 unsigned int rgb(unsigned char red, unsigned char green, unsigned char blue);
 t_complex get_compl_coord(int x, int y);
@@ -61,8 +64,8 @@ t_complex add_complex(t_complex a, t_complex b);
 t_complex abs_complex(t_complex c);
 double norm_complex(t_complex a);
 int max (int a, int b);
-typedef unsigned int u32;
-typedef unsigned char u8;
+int	mouse_event(int key, int x, int y, t_params *params);
+int	on_destroy(void);
 
 #define ADDSCALE 1.25
 
