@@ -1,61 +1,84 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   fractals.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ksenia <ksenia@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/09/24 14:27:24 by ksenia            #+#    #+#             */
+/*   Updated: 2023/09/24 14:34:34 by ksenia           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "fractol.h"
+
+void	draw_cell(t_params *params, u32 color, int x, int y)
+{
+	int	dx;
+	int	dy;
+
+	dx = 0;
+	while (dx < params->downsampling)
+	{
+		dy = 0;
+		while (dy < params->downsampling)
+		{
+			my_mlx_pixel_put(params->img, x + dx, y + dy, color);
+			dy++;
+		}
+		dx++;
+	}
+}
+
+void	draw_fractal(t_params *params, u32 (*fractal)(int, int, t_params *))
+{
+	int	x;
+	int	y;
+	u32	color;
+
+	x = 0;
+	while (x < WIDTH)
+	{
+		y = 0;
+		while (y < HEIGHT)
+		{
+			color = fractal(x, y, params);
+			draw_cell(params, color, x, y);
+			y += params->downsampling;
+		}
+		x += params->downsampling;
+	}
+}
 
 void	choose_fractal(int argc, char *argv[], t_params *params)
 {
-	unsigned int	color;
-	t_complex		julia_params;
-	double			a3;
-	double			a4;
-
+	double	a3;
+	double	a4;
+	u32		(*fractal)(int, int, t_params *);
 	(void)argc;
+	
+	fractal = mandelbrot;
 	if (ft_streq(argv[1], "mandelbrot") || (parse_double(argv[1])) == 1)
-	{
-		for (int x = 0; x <= 1920; x += params->downsampling)
-		{
-			for (int y = 0; y <= 1080; y += params->downsampling)
-			{
-				color = mandelbrot(x, y, params);
-				for (int dx = 0; dx < params->downsampling; dx++)
-					for (int dy = 0; dy < params->downsampling; dy++)
-						my_mlx_pixel_put(params->img, x + dx, y + dy, color);
-			}
-		}
-	}
+		fractal = mandelbrot;
 	else if (ft_streq(argv[1], "julia") || ft_atoi(argv[1]) == 2)
 	{
 		a3 = parse_double(argv[2]);
 		a4 = parse_double(argv[3]);
-		printf("a3=%f a4=%f\n", a3, a4);
 		if ((a3 != 0) & (a4 != 0))
 		{
-			julia_params.real = a3;
-			julia_params.imag = a4;
+			params->julia_params.real = a3;
+			params->julia_params.imag = a4;
 		}
 		else
 		{
-			julia_params.real = 1.0;
-			julia_params.imag = 0.5;
+			params->julia_params.real = 1.0;
+			params->julia_params.imag = 0.5;
 		}
-		for (int x = 0; x <= 1920; x++)
-		{
-			for (int y = 0; y <= 1080; y++)
-			{
-				color = julia(x, y, params, julia_params);
-				my_mlx_pixel_put(params->img, x, y, color);
-			}
-		}
+		fractal = julia;
 	}
 	else if (ft_streq(argv[1], "burningship") || ft_atoi(argv[1]) == 3)
-	{
-		for (int x = 0; x <= 1920; x++)
-		{
-			for (int y = 0; y <= 1080; y++)
-			{
-				color = burningship(x, y, params);
-				my_mlx_pixel_put(params->img, x, y, color);
-			}
-		}
-	}
+		fractal = burningship;
+	draw_fractal(params, fractal);
 }
 
 unsigned int	color(double value, t_params params)
@@ -70,24 +93,20 @@ unsigned int	color(double value, t_params params)
 	{
 		return (color((value - 0.5) * 2, params));
 	}
-	// int blue = (int)((1.0 - value) * 255.0);
 	rg = 255.0 * value * 2;
 	return (rgb(params.color, rg, params.color - rg));
 }
 
 unsigned int	mandelbrot(int x, int y, t_params *params)
 {
-	const double	radius;
-	t_complex		p;
-	int				i;
-	t_complex		c;
-	double			distance;
-	const int		max_i;
-	t_complex		next;
-	double			kek;
-	double			d;
+	t_complex	p;
+	int			i;
+	t_complex	c;
+	double		distance;
+	t_complex	next;
+	double		kek;
+	double		d;
 
-	radius = 100;
 	p = get_compl_coord(x, y);
 	p.real *= params->scale;
 	p.imag *= params->scale;
@@ -95,32 +114,30 @@ unsigned int	mandelbrot(int x, int y, t_params *params)
 	p.imag += params->dy;
 	i = 0;
 	c = p;
-	max_i = 256;
-	while (i < max_i)
+	while (i < MANDELBROT_MAX_I)
 	{
 		next = add_complex(mult_complex(c, c), p);
 		distance = hypot(next.real, next.imag);
-		if (isnan(module(next)) || (distance > radius))
+		if (isnan(module(next)) || (distance > MANDELBROT_RADIUS))
 		{
 			break ;
 		}
 		c = next;
 		i++;
 	}
-	i = max(max_i - i, 0);
-	if (i == max_i)
+	i = max(MANDELBROT_MAX_I - i, 0);
+	if (i == MANDELBROT_MAX_I)
 		return (0xffffff);
-	kek = (double)i / (double)max_i;
-	d = module(c) / radius;
+	kek = (double)i / (double)MANDELBROT_MAX_I;
+	d = module(c) / MANDELBROT_RADIUS;
 	return (color((kek * 31 - d) / 32, *params));
 }
 
-unsigned int	julia(int x, int y, t_params *params, t_complex julia)
+unsigned int	julia(int x, int y, t_params *params)
 {
 	t_complex	c;
 	t_complex	p;
 	int			i;
-	const int	max_i;
 	double		first;
 	double		dist;
 
@@ -131,16 +148,15 @@ unsigned int	julia(int x, int y, t_params *params, t_complex julia)
 	c.imag += params->dy;
 	p = c;
 	i = 0;
-	max_i = 128;
-	while (i < max_i)
+	while (i < JULIA_MAX_I)
 	{
 		p = c;
-		c = add_complex(mult_complex(c, c), julia);
+		c = add_complex(mult_complex(c, c), params->julia_params);
 		i++;
 		if (hypot(c.real, c.imag) > 100)
 			break ;
 	}
-	first = (double)(i) / (double)(max_i);
+	first = (double)(i) / (double)(JULIA_MAX_I);
 	first = 1.0 - first;
 	dist = hypot(p.real, p.imag) / 100;
 	if (isnan(dist))

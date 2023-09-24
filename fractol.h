@@ -37,6 +37,8 @@ typedef struct params {
     char** argv;
 	unsigned char color;
 
+	t_complex julia_params;
+
 	int downsampling;
 }	t_params;
 
@@ -53,7 +55,7 @@ int max (int a, int b);
 unsigned int mandelbrot(int x, int y, t_params* params);
 int on_keydown(int key, t_params* params);
 void choose_fractal(int argc,char *argv[], t_params *params);
-unsigned int julia(int x, int y, t_params* params, t_complex julia);
+unsigned int julia(int x, int y, t_params* params);
 double parse_double(char* s);
 t_complex abs_complex(t_complex c);
 unsigned int burningship(int x, int y, t_params* params);
@@ -68,6 +70,9 @@ int	mouse_event(int key, int x, int y, t_params *params);
 int	on_destroy(void);
 
 #define ADDSCALE 1.25
+#define MANDELBROT_RADIUS 100
+#define MANDELBROT_MAX_I 256
+#define JULIA_MAX_I 128
 
 
 #endif
