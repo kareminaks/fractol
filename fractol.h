@@ -35,7 +35,7 @@ typedef struct params {
 
     int argc;
     char** argv;
-	 
+	unsigned char color;
 
 	int downsampling;
 }	t_params;

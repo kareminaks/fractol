@@ -58,7 +58,12 @@ int on_keydown(int key, t_params* params) {
 	if (key == '[') params->downsampling*=2;
 	if ((key == ']') && (params->downsampling > 1)) params->downsampling/=2;
 	if (key == 65307) on_destroy();
-	if (key == 'c') params->color = alternative_color;
+	if (key == 'c') 
+	{
+		if (params->color ==128)
+		params->color = 255;
+	else params->color = 128;
+	}
 
 	
 	choose_fractal(params->argc, params->argv, params);
@@ -102,7 +107,7 @@ double parse_double(char* s) {
 
 int	mouse_event(int key, int x, int y, t_params *params)
 {	
-	const float addscale = 1.25;(kek * 31 - d) / 32
+	const float addscale = 1.25;
 	if (key == 4) {
 		params->scale *=addscale;
 	}
@@ -135,7 +140,7 @@ int	main(int argc, char **argv)
 	params.argc = argc;
 	params.argv = argv;
 	params.downsampling = 8;
-	params.color = normal_color;
+	params.color = 255;
 
 	mlx = mlx_init();
 	mlx_win = mlx_new_window(mlx, 1920, 1080, "fractal");
