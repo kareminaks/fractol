@@ -6,7 +6,7 @@
 /*   By: ksenia <ksenia@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/24 13:44:30 by ksenia            #+#    #+#             */
-/*   Updated: 2023/09/24 14:11:31 by ksenia           ###   ########.fr       */
+/*   Updated: 2023/09/24 14:38:38 by ksenia           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,8 @@ void	init_params(t_params *params, t_data *img)
 	params->mlx = mlx_init();
 	params->mlx_win = mlx_new_window(params->mlx, 1920, 1080, "fractal");
 	params->img = img;
+	params->julia_params.real = 1.0;
+	params->julia_params.imag = 0.5;
 }
 
 int	main(int argc, char **argv)

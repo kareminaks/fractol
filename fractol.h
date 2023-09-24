@@ -47,7 +47,7 @@ typedef unsigned char u8;
 
 void	my_mlx_pixel_put(t_data *data, int x, int y, int color);
 unsigned int rgb(unsigned char red, unsigned char green, unsigned char blue);
-t_complex get_compl_coord(int x, int y);
+t_complex get_compl_coord(int x, int y, t_params* params);
 t_complex mult_complex(t_complex a, t_complex b);
 t_complex add_complex(t_complex a, t_complex b);
 unsigned int point_color(double r,unsigned int color);

@@ -6,7 +6,7 @@
 /*   By: ksenia <ksenia@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/24 14:11:35 by ksenia            #+#    #+#             */
-/*   Updated: 2023/09/24 14:12:46 by ksenia           ###   ########.fr       */
+/*   Updated: 2023/09/24 14:36:47 by ksenia           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,12 +28,16 @@ u32	rgb(u8 red, u8 green, u8 blue)
 	return (rgb);
 }
 
-t_complex	get_compl_coord(int x, int y)
+t_complex	get_compl_coord(int x, int y, t_params* params)
 {
 	t_complex	c;
 
 	c.real = (double)(x - WIDTH / 2) / (WIDTH / 4);
 	c.imag = (double)(y - HEIGHT / 2) / (WIDTH / 4);
+	c.real *= params->scale;
+	c.imag *= params->scale;
+	c.real += params->dx;
+	c.imag += params->dy;
 	return (c);
 }
 

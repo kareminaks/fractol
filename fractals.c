@@ -6,7 +6,7 @@
 /*   By: ksenia <ksenia@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/24 14:27:24 by ksenia            #+#    #+#             */
-/*   Updated: 2023/09/24 14:34:34 by ksenia           ###   ########.fr       */
+/*   Updated: 2023/09/24 14:41:38 by ksenia           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,8 +55,8 @@ void	choose_fractal(int argc, char *argv[], t_params *params)
 	double	a3;
 	double	a4;
 	u32		(*fractal)(int, int, t_params *);
+
 	(void)argc;
-	
 	fractal = mandelbrot;
 	if (ft_streq(argv[1], "mandelbrot") || (parse_double(argv[1])) == 1)
 		fractal = mandelbrot;
@@ -68,11 +68,6 @@ void	choose_fractal(int argc, char *argv[], t_params *params)
 		{
 			params->julia_params.real = a3;
 			params->julia_params.imag = a4;
-		}
-		else
-		{
-			params->julia_params.real = 1.0;
-			params->julia_params.imag = 0.5;
 		}
 		fractal = julia;
 	}
@@ -102,26 +97,18 @@ unsigned int	mandelbrot(int x, int y, t_params *params)
 	t_complex	p;
 	int			i;
 	t_complex	c;
-	double		distance;
 	t_complex	next;
 	double		kek;
-	double		d;
 
-	p = get_compl_coord(x, y);
-	p.real *= params->scale;
-	p.imag *= params->scale;
-	p.real += params->dx;
-	p.imag += params->dy;
+	p = get_compl_coord(x, y, params);
 	i = 0;
 	c = p;
 	while (i < MANDELBROT_MAX_I)
 	{
 		next = add_complex(mult_complex(c, c), p);
-		distance = hypot(next.real, next.imag);
-		if (isnan(module(next)) || (distance > MANDELBROT_RADIUS))
-		{
+		if (isnan(module(next)) || (hypot(next.real,
+					next.imag) > MANDELBROT_RADIUS))
 			break ;
-		}
 		c = next;
 		i++;
 	}
@@ -129,8 +116,7 @@ unsigned int	mandelbrot(int x, int y, t_params *params)
 	if (i == MANDELBROT_MAX_I)
 		return (0xffffff);
 	kek = (double)i / (double)MANDELBROT_MAX_I;
-	d = module(c) / MANDELBROT_RADIUS;
-	return (color((kek * 31 - d) / 32, *params));
+	return (color((kek * 31 - module(c) / MANDELBROT_RADIUS) / 32, *params));
 }
 
 unsigned int	julia(int x, int y, t_params *params)
@@ -141,11 +127,7 @@ unsigned int	julia(int x, int y, t_params *params)
 	double		first;
 	double		dist;
 
-	c = get_compl_coord(x, y);
-	c.real *= params->scale;
-	c.imag *= params->scale;
-	c.real += params->dx;
-	c.imag += params->dy;
+	c = get_compl_coord(x, y, params);
 	p = c;
 	i = 0;
 	while (i < JULIA_MAX_I)
@@ -167,11 +149,7 @@ unsigned int	julia(int x, int y, t_params *params)
 unsigned int	burningship(int x, int y, t_params *params)
 {
 	const double radius = 100;
-	t_complex p = get_compl_coord(x, y);
-	p.real *= params->scale;
-	p.imag *= params->scale;
-	p.real += params->dx;
-	p.imag += params->dy;
+	t_complex p = get_compl_coord(x, y, params);
 	int i = 0;
 
 	t_complex c = p;
