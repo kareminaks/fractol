@@ -61,6 +61,10 @@ t_complex add_complex(t_complex a, t_complex b);
 t_complex abs_complex(t_complex c);
 double norm_complex(t_complex a);
 int max (int a, int b);
+typedef unsigned int u32;
+typedef unsigned char u8;
+
+#define ADDSCALE 1.25
 
 
 #endif
